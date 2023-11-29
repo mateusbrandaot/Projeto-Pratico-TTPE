@@ -1,9 +1,13 @@
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
+
 import java.util.Date;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import ttpe.projeto.exception.DescricaoEmBrancoException;
+import ttpe.projeto.exception.ValorInvalidoException;
 import ttpe.projeto.model.Empresa;
 import ttpe.projeto.model.Fornecedor;
 import ttpe.projeto.model.Produto;
@@ -29,4 +33,20 @@ class ProdutoTest {
      });
  }
 
+ @Test
+ public void deveLancarExcecaoParaValorInvalido() {
+     Assertions.assertThrows(ValorInvalidoException.class, () -> {
+         new Produto(id, nomePadrao, descricaoPadrao, codigoBarraPadrao, -1.0, qtdAtualPadrao, empresaPadrao, fornecedorPadrao, qtdMinimaPadrao, dataAtualPadrao);
+     });
+ }
+	
+ @Test
+ public void deveCadastrarProdutoValido() {
+     try {
+     	Produto produto = new Produto(id, nomePadrao, descricaoPadrao, codigoBarraPadrao, precoPadrao, qtdAtualPadrao, empresaPadrao, fornecedorPadrao, qtdMinimaPadrao, dataAtualPadrao);
+         assertNotNull(produto);
+     } catch (DescricaoEmBrancoException | ValorInvalidoException e) {
+         fail("Não deveria lançar exceção para dados válidos.");
+     }
+ }
 }
