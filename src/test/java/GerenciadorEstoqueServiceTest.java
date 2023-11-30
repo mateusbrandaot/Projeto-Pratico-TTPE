@@ -1,6 +1,8 @@
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.stream.Stream;
@@ -122,5 +124,15 @@ public class GerenciadorEstoqueServiceTest {
 			Assertions.assertEquals(precoEsperado, produto.getPreco());
 		}
 
+		@Test
+		public void testAlertaEstoqueBaixo() throws Exception{
+			 ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+		     PrintStream originalOut = System.out;
+		     System.setOut(new PrintStream(outContent));
+		     Produto produto = new Produto(id, nomePadrao, descricaoPadrao, codigoBarraPadrao, precoPadrao,
+						30, empresaPadrao, fornecedorPadrao, qtdMinimaPadrao, dataAtualPadrao);
+		     service.alertaEstoque(produto, new Date()); 
+	         assertFalse(outContent.toString().isEmpty());
+		}
 		
 }
