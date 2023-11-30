@@ -1,7 +1,11 @@
 import java.util.Date;
+import java.util.stream.Stream;
 
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import ttpe.projeto.model.Empresa;
 import ttpe.projeto.model.Estoque;
@@ -23,7 +27,7 @@ public class GerenciadorEstoqueServiceTest {
 	private int qtdMinimaPadrao = 30;
 	private Date dataAtualPadrao = new Date();
 
-	private Estoque estoque  = new Estoque();
+	
 
 	private GerenciadorEstoqueService service = new GerenciadorEstoqueService();
 
@@ -36,9 +40,34 @@ public class GerenciadorEstoqueServiceTest {
 		String tipoTransacao = "Venda";
 		Produto produto = new Produto(id, nomePadrao, descricaoPadrao, codigoBarraPadrao, precoPadrao,
 				qtdAtualPadrao, empresaPadrao, fornecedorPadrao, qtdMinimaPadrao, dataAtualPadrao);
+		Estoque estoque  = new Estoque();
 		estoque.adicionarProduto(produto);
 		boolean result = service.registrarTransacao(id, quantidade, tipoTransacao, empresaPadrao, empresaPadrao, estoque);
 		Assertions.assertEquals(true, result);
 	}
+	
+	 private static Stream<Arguments> registrarTransacaoArguments() {
+	        return Stream.of(
+	            Arguments.of("1", 5, "Venda", true),
+	            Arguments.of("2", -1, "Venda", false), // Quantidade inválida
+	            Arguments.of("inexistente", 5, "Venda", false), // ID de produto inexistente
+	            Arguments.of("1", 5, "Recebimento", true),
+	            Arguments.of("1", 5, "Devolução", true),
+	            Arguments.of("1", 5, "Transferencia", true),
+	            Arguments.of("1", 5, "TipoInvalido", false) // Tipo de transação inválido
+	        );
+	    }
+
+	    @ParameterizedTest
+	    @MethodSource("registrarTransacaoArguments")
+	    void testRegistrarTransacaoParametrizado(String idProduto, int quantidade, String tipoTransacao, boolean resultadoEsperado) throws Exception {
+	        Produto produtoMock = new Produto(id, nomePadrao, descricaoPadrao, codigoBarraPadrao, precoPadrao,
+					qtdAtualPadrao, empresaPadrao, fornecedorPadrao, qtdMinimaPadrao, dataAtualPadrao);
+	        Estoque estoque  = new Estoque();
+	        Empresa empresaDestino = new Empresa(2, "35737451000290", "FILIAL", "rua portugal");
+	        estoque.adicionarProduto(produtoMock);
+	        boolean resultado = service.registrarTransacao(idProduto, quantidade, tipoTransacao, empresaPadrao, empresaDestino, estoque);
+	        Assertions.assertEquals(resultadoEsperado, resultado);
+	    }
 	
 }

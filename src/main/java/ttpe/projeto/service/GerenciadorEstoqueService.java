@@ -2,6 +2,7 @@ package ttpe.projeto.service;
 
 import java.util.Date;
 
+import ttpe.projeto.exception.OperacaoInvalidaException;
 import ttpe.projeto.exception.ProdutoInvalidoException;
 import ttpe.projeto.exception.ValorInvalidoException;
 import ttpe.projeto.model.Empresa;
@@ -40,12 +41,10 @@ public class GerenciadorEstoqueService {
 				transacaoTransferenciaProduto(produto, empresaOrigem, empresaDestino, quantidade);
 				break;
 			default:
-
-				System.out.println("Tipo de transação não reconhecido: " + tipoTransacao);
-				break;
+				throw new OperacaoInvalidaException("Operacao invalida.");
 			}
 			return true;
-		} catch (ProdutoInvalidoException e) {
+		} catch (ProdutoInvalidoException | OperacaoInvalidaException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;
