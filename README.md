@@ -51,4 +51,4 @@ Após isso, precisa ter instalado e configurado o Maven e também Java. Sugerimo
 
 E executar os Testes com o JUnit5
 
-![exemplo]()
+<img src="exemplo.jpeg">
