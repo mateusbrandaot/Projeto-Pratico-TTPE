@@ -7,7 +7,7 @@
 | Eurico Menezes de Abreu Neto | 200017519 |
 | Felipe Correia Andrade | 180113259 |
 | Mateus Brandão Teixeira | 180127535 |
-| Matheus S. | X |
+| Matheus Fonseca Sousa | 170111059 |
 
 ## Controle de Estoque e Inventário - Projeto TDD
 
