@@ -80,4 +80,8 @@ public class GerenciadorEstoqueService {
 		produto.setEmpresaDetentora(empresaDestino);
 
 	}
+	
+	public void alertaEstoque(Produto produto, Date now) {
+        
+    }
 }

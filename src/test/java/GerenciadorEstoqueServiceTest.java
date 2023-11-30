@@ -1,3 +1,6 @@
+import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertTrue;
+
 import java.util.Date;
 import java.util.stream.Stream;
 
@@ -7,6 +10,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import ttpe.projeto.exception.DescricaoEmBrancoException;
+import ttpe.projeto.exception.ValorInvalidoException;
 import ttpe.projeto.model.Empresa;
 import ttpe.projeto.model.Estoque;
 import ttpe.projeto.model.Fornecedor;
@@ -91,4 +96,18 @@ public class GerenciadorEstoqueServiceTest {
 	        Assertions.assertEquals(resultadoEsperado, produtoMock.getQuantidadeEmEstoque());
 	    }
 	
+	   
+		@Test
+		void testAlertaEstoqueFalha() throws DescricaoEmBrancoException, ValorInvalidoException {
+			GerenciadorEstoqueService service = new GerenciadorEstoqueService();
+			Produto produto = new Produto(id, nomePadrao, descricaoPadrao, codigoBarraPadrao, precoPadrao,
+					qtdAtualPadrao, empresaPadrao, fornecedorPadrao, qtdMinimaPadrao, dataAtualPadrao);
+			Date now = new Date();
+
+			Exception excecao = assertThrows(Exception.class, () -> service.alertaEstoque(produto, now));
+
+			String mensagemEsperada = "Funcionalidade ainda não implementada";
+			String mensagemReal = excecao.getMessage();
+			assertTrue(mensagemReal.contains(mensagemEsperada));
+		}
 }
