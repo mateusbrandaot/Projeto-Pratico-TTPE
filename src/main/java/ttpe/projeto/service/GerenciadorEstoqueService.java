@@ -45,6 +45,7 @@ public class GerenciadorEstoqueService {
 			default:
 				throw new OperacaoInvalidaException("Operacao invalida.");
 			}
+			alertaEstoque(produto, now);
 			return true;
 		} catch (ProdutoInvalidoException | OperacaoInvalidaException e) {
 			// TODO Auto-generated catch block
