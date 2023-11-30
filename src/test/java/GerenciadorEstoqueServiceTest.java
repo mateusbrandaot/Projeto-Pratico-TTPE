@@ -11,6 +11,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import ttpe.projeto.exception.DescricaoEmBrancoException;
+import ttpe.projeto.exception.EstoqueNegativoException;
 import ttpe.projeto.exception.ValorInvalidoException;
 import ttpe.projeto.model.Empresa;
 import ttpe.projeto.model.Estoque;
@@ -96,18 +97,15 @@ public class GerenciadorEstoqueServiceTest {
 	        Assertions.assertEquals(resultadoEsperado, produtoMock.getQuantidadeEmEstoque());
 	    }
 	
-	   
-		@Test
-		void testAlertaEstoqueFalha() throws DescricaoEmBrancoException, ValorInvalidoException {
-			GerenciadorEstoqueService service = new GerenciadorEstoqueService();
-			Produto produto = new Produto(id, nomePadrao, descricaoPadrao, codigoBarraPadrao, precoPadrao,
-					qtdAtualPadrao, empresaPadrao, fornecedorPadrao, qtdMinimaPadrao, dataAtualPadrao);
-			Date now = new Date();
-
-			Exception excecao = assertThrows(Exception.class, () -> service.alertaEstoque(produto, now));
-
-			String mensagemEsperada = "Funcionalidade ainda não implementada";
-			String mensagemReal = excecao.getMessage();
-			assertTrue(mensagemReal.contains(mensagemEsperada));
-		}
+		
+		 @Test
+		    public void testAlertaEstoqueComEstoqueNegativo() throws DescricaoEmBrancoException, ValorInvalidoException {
+		        GerenciadorEstoqueService service = new GerenciadorEstoqueService();
+		        Produto produto = new Produto(id, nomePadrao, descricaoPadrao, codigoBarraPadrao, precoPadrao,
+		        		qtdAtualPadrao, empresaPadrao, fornecedorPadrao, qtdMinimaPadrao, dataAtualPadrao);
+		        produto.setQuantidadeEmEstoque(-5);
+		        Date now = new Date();
+		        assertThrows(EstoqueNegativoException.class, () -> service.alertaEstoque(produto, now));
+		    }
+		
 }

@@ -2,6 +2,7 @@ package ttpe.projeto.service;
 
 import java.util.Date;
 
+import ttpe.projeto.exception.EstoqueNegativoException;
 import ttpe.projeto.exception.OperacaoInvalidaException;
 import ttpe.projeto.exception.ProdutoInvalidoException;
 import ttpe.projeto.exception.ValorInvalidoException;
@@ -81,7 +82,11 @@ public class GerenciadorEstoqueService {
 
 	}
 	
-	public void alertaEstoque(Produto produto, Date now) {
+	public void alertaEstoque(Produto produto, Date now) throws EstoqueNegativoException {
+		 if (produto.getQuantidadeEmEstoque() < 0 ) {
+	            produto.setQuantidadeEmEstoque(0);
+	            throw new EstoqueNegativoException("Estoque negativo");
+	        }
         
     }
 }
