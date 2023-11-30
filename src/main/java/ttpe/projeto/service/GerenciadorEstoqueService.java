@@ -1,6 +1,7 @@
 package ttpe.projeto.service;
 
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import ttpe.projeto.exception.EstoqueNegativoException;
 import ttpe.projeto.exception.OperacaoInvalidaException;
@@ -82,11 +83,30 @@ public class GerenciadorEstoqueService {
 
 	}
 	
-	public void alertaEstoque(Produto produto, Date now) throws EstoqueNegativoException {
-		 if (produto.getQuantidadeEmEstoque() < 0 ) {
-	            produto.setQuantidadeEmEstoque(0);
-	            throw new EstoqueNegativoException("Estoque negativo");
-	        }
-        
-    }
+	 public void alertaEstoque(Produto produto, Date now) throws EstoqueNegativoException {
+	    	
+		 if(produto.getQtdMinimaEstoque() < produto.getQtdMinimaEstoque()) {
+	    		System.out.printf("estoque baixo produto %s total %s fornecedor %s ", produto.getId(), produto.getQuantidadeEmEstoque(), produto.getFornecedor().getNome());
+	    	}
+	    	
+	    	if(isProximoVencimento(now,produto.getValidade())) {
+	    		System.out.print("produtos próximos de vencer");
+	    		
+	    	Double valorDesconto = produto.getPreco() * 0.2;
+	    	Double valorFinal = produto.getPreco() - valorDesconto;
+	    	produto.setPreco(valorFinal);
+	    	}
+			
+	    	if(produto.getQuantidadeEmEstoque() < 0 ) {
+				produto.setQuantidadeEmEstoque(0);
+				throw new EstoqueNegativoException("Estoque negativo");
+			}
+		    	
+	    }
+	 
+	 public  boolean isProximoVencimento(Date now, Date validade) {
+	        long diffInMillis = Math.abs(now.getTime() - validade.getTime());
+	        long diffInDays = TimeUnit.DAYS.convert(diffInMillis, TimeUnit.MILLISECONDS);
+	        return diffInDays == 10;
+	    }
 }
