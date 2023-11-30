@@ -1,6 +1,7 @@
 import static org.junit.Assert.assertThrows;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.stream.Stream;
 
@@ -98,14 +99,28 @@ public class GerenciadorEstoqueServiceTest {
 	    }
 	
 		
-		 @Test
-		    public void testAlertaEstoqueComEstoqueNegativo() throws DescricaoEmBrancoException, ValorInvalidoException {
-		        GerenciadorEstoqueService service = new GerenciadorEstoqueService();
-		        Produto produto = new Produto(id, nomePadrao, descricaoPadrao, codigoBarraPadrao, precoPadrao,
-		        		qtdAtualPadrao, empresaPadrao, fornecedorPadrao, qtdMinimaPadrao, dataAtualPadrao);
-		        produto.setQuantidadeEmEstoque(-5);
-		        Date now = new Date();
-		        assertThrows(EstoqueNegativoException.class, () -> service.alertaEstoque(produto, now));
-		    }
+		@Test
+		public void testAlertaEstoqueComEstoqueNegativo() throws DescricaoEmBrancoException, ValorInvalidoException {
+			GerenciadorEstoqueService service = new GerenciadorEstoqueService();
+			Produto produto = new Produto(id, nomePadrao, descricaoPadrao, codigoBarraPadrao, precoPadrao,
+					qtdAtualPadrao, empresaPadrao, fornecedorPadrao, qtdMinimaPadrao, dataAtualPadrao);
+			produto.setQuantidadeEmEstoque(-5);
+			Date now = new Date();
+			assertThrows(EstoqueNegativoException.class, () -> service.alertaEstoque(produto, now));
+		}
+
+		@Test
+		public void testAlertaEstoqueComProdutoProximoVencimento() throws DescricaoEmBrancoException, ValorInvalidoException, EstoqueNegativoException {
+			Calendar calendar = Calendar.getInstance();
+			calendar.add(Calendar.DAY_OF_MONTH, -5);
+			Date datavencimentoMock = calendar.getTime();
+			Date DataAtual = new Date();
+			Produto produto = new Produto(id, nomePadrao, descricaoPadrao, codigoBarraPadrao, precoPadrao,
+					qtdAtualPadrao, empresaPadrao, fornecedorPadrao, qtdMinimaPadrao, datavencimentoMock);
+			double precoEsperado = 8.40;
+			service.alertaEstoque(produto, DataAtual);
+			Assertions.assertEquals(precoEsperado, produto.getPreco());
+		}
+
 		
 }

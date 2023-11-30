@@ -107,6 +107,6 @@ public class GerenciadorEstoqueService {
 	 public  boolean isProximoVencimento(Date now, Date validade) {
 	        long diffInMillis = Math.abs(now.getTime() - validade.getTime());
 	        long diffInDays = TimeUnit.DAYS.convert(diffInMillis, TimeUnit.MILLISECONDS);
-	        return diffInDays == 10;
+	        return diffInDays < 10;
 	    }
 }
