@@ -44,7 +44,7 @@ Este é um projeto Java que implementa funcionalidades básicas de controle de e
 Para rodar nosso projeto deverá realizar o clone do repositório
 
 ``
-git clone https://github.com/mateusbrandaot/Trabalho-Pratico-TTPE.git
+git clone https://github.com/mateusbrandaot/Projeto-Pratico-TTPE.git
 ``
 
 Após isso, precisa ter instalado e configurado o Maven e também Java. Sugerimos também uma IDE a sua escolha (Eclipse ou IntelliJ)
